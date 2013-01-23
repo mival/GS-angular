@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <!--Sidebar content-->
+      Search: <input ng-model="query">
+      <a href="#" ng-click="load()">Refresh</a>
+    </div>
+    <div class="span10">
+      <!--Body content-->
+      <ul>
+        <li ng-repeat="post in posts | filter:query">
+          <a href="#/posts/{{post.id}}">{{post.title}}</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
