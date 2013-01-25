@@ -3,25 +3,30 @@
 /* Controllers */
 
 function PostsController($scope, Post) {
-	console.log("user",$scope.user)
-   $scope.posts = Post($scope.user.token.token).query();
+
 }
 
 function PostController($scope, $routeParams, Post, Comment) {
-	$scope.load = function() {
-		$scope.post = Post($scope.user.token.token).get({postId: $routeParams.postId});
-		$scope.comments = Comment($scope.user.token.token).query({postId: $routeParams.postId});
-	}
-	$scope.load();
+	$scope.post = Post.get({auth_token:$scope.user["token"], postId: $routeParams.postId});
+	$scope.comments = Comment.query({auth_token:$scope.user["token"], postId: $routeParams.postId});
 }
 
-function UserController($scope, User) {
+function UserController($scope, TokenFactory, Post) {
+	var Token = new TokenFactory()
 	$scope.logout = function() {
-		User.logout($scope.user);
+		Token.$delete({auth_token: $scope.user["token"]});
+		$scope.user = {"email":"not loget in"};
+		$scope.posts = "";
 	}
-	$scope.login = function() {
-		$scope.user = {"name":"user@iquest.cz",'pass':"password"};
-		$scope.user["token"] = User.login($scope.user);
+	$scope.login = function(user, pass) {
+		$scope.user = {"email": user, "password": pass};
+		Token.$create({"email": user, "password": pass}, function(response) {
+			$scope.user["token"] = response.token
+			Post.query({auth_token:$scope.user["token"]},function(posts){
+   				$scope.posts = posts;
+   			});
+		});		
+		
 	};
 }
 

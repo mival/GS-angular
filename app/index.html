@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="phonecat">
+<html lang="en" ng-app="app">
 <head>
   <meta charset="utf-8">
   <title>GS</title>
@@ -8,7 +8,8 @@
 </head>
 <body ng-controller="UserController">
   <a href="#" ng-click="logout()">Logout</a>
-  <a href="#" ng-click="login()">Login</a>
+  <a href="#" ng-click="login('user@iquest.cz','password')">Login</a>
+  User: {{user.email}}
   <div ng-view></div>
 
   <script src="lib/angular/angular.js"></script>
